@@ -23,7 +23,7 @@ const cards = document.querySelector('.cards')
  cards.appendChild(card);
  card.appendChild(heading);
  card.appendChild(email);
- card.appendChild(mentors);
+ card.appendChild(mentor);
 
  //adding click event to card
  console.log(card)
@@ -47,7 +47,7 @@ console.error(err);
 .finally(() => console.log("fuggin donez"));
 
 }
-}
+
  // function buildNav(links) {
   //  const container = document.createElement("nav") 
   //    links.forEach(link => {
