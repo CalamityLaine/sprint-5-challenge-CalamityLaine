@@ -1,4 +1,4 @@
-async function sprintChallenge5( ) { // Note the async keyword, in case you wish to use `await` inside sprintChallenge5
+//async function sprintChallenge5( ) { // Note the async keyword, in case you wish to use `await` inside sprintChallenge5
   // 👇 WORK WORK BELOW THIS LINE 👇
 
   const footer = document.querySelector('footer')
@@ -6,42 +6,142 @@ async function sprintChallenge5( ) { // Note the async keyword, in case you wish
   footer.textContent = `© BLOOM INSTITUTE OF TECHNOLOGY ${currentYear}`
 
 //entry point into cards
-const cards = document.querySelector('.cards')
+//let learner;
+//const cards = document.querySelector('.cards')
 
 //creating card element within cards
- const card = document.createElement('div');
- const heading = document.createElement('h3');
- const email = document.createElement('div');
- const mentors = document.createElement('h4');
+// const card = document.createElement('div');
+// const heading = document.createElement('h3');
+// const email = document.createElement('div');
+// const mentors = document.createElement('h4');
 
  //skeleton for card content
- heading.textContent = 'learner name here';
- email.textContent = 'email goes here';
- mentors.textContent = 'mentors: dropdown here'
- card.classList.add('card')
+// heading.textContent = "learner.fullName";
+// email.textContent = "learner.email";
+// mentors.textContent = "learner.mentors";
+// card.classList.add('card')
 
- cards.appendChild(card);
- card.appendChild(heading);
- card.appendChild(email);
- card.appendChild(mentors);
+// cards.appendChild(card);
+// card.appendChild(heading);
+// card.appendChild(email);
+// card.appendChild(mentors);
 
  //adding click event to card
- console.log(card)
- card.addEventListener('click',() => {
- card.classList.toggle('selected');
- })
+// console.log(card)
+// card.addEventListener('click',() => {
+// card.classList.toggle('selected');
+// })
 
- return card;
+// return card;
+//}
+
+async function fetchLearners() {
+  try {
+    const response = await axios.get('http://localhost:3003/api/learners');
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching learners:', error);
+    return [];
+  }
 }
 
-axios.get('http://localhost:3003/api/learners')
-.then(res => {
-  console.log(res.data);
-})
-.catch(err => {
-console.error(err);
-})
-.finally(() => console.log("fuggin donez"));
+async function fetchMentors() {
+  try {
+    const response = await axios.get('http://localhost:3003/api/mentors');
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching mentors:', error);
+    return [];
+  }
+}
+
+async function fetchAndCombineData() {
+  try {
+    const [learnersData, mentorsData] = await Promise.all([
+      fetchLearners(),
+      fetchMentors()
+    ]);
+
+    // Map mentor IDs to mentor names
+    const mentorMap = new Map();
+    mentorsData.forEach(mentor => {
+      mentorMap.set(mentor.id, mentor.fullName);
+    });
+
+    // Combine learner and mentor data
+    const combinedData = learnersData.map(learner => ({
+      id: learner.id,
+      email: learner.email,
+      fullName: learner.fullName,
+      mentors: learner.mentors.map(mentorId => mentorMap.get(mentorId))
+    }));
+
+    return combinedData;
+  } catch (error) {
+    console.error('Error fetching and combining data:', error);
+    return [];
+  }
+}
+
+  function createLearnerCard(learner) {
+    const card = document.createElement('div');
+    card.classList.add('learner-card');
+    card.innerHTML = `
+      <h2>${learner.fullName}</h2>
+      <p>Email: ${learner.email}</p>
+      <p>Mentors:</p>
+      <ul>
+        ${learner.mentors.map(mentor => `<li>${mentor}</li>`).join('')}
+      </ul>
+      <button class="toggle-button">Toggle Mentors</button>
+    `;
+  
+    // Add click event listener to the card
+    card.addEventListener('click', event => {
+      const target = event.target;
+  
+      // Check if the click target is the toggle button
+      if (target.classList.contains('toggle-button')) {
+        const ul = card.querySelector('ul');
+        ul.classList.toggle('hidden');
+      }
+    });
+  
+    return card;
+  }
+  
+  // Function to render learner cards
+  async function renderLearnerCards() {
+    try {
+      const combinedData = await fetchAndCombineData(); // Call fetchAndCombineData
+      const container = document.querySelector('.cards');
+  
+      // Loop over the combined data and generate learner cards
+      combinedData.forEach(learner => {
+        const learnerCard = createLearnerCard(learner);
+        container.appendChild(learnerCard);
+      });
+    } catch (error) {
+      console.error('Error rendering learner cards:', error);
+    }
+  }
+  
+  // Call the renderLearnerCards function to render the learner cards
+  renderLearnerCards().catch(error => {
+    console.error('Error rendering learner cards:', error);
+  });
+
+
+
+//axios.get('http://localhost:3003/api/learners')
+//.then(res => {
+//  console.log(res.data);
+//})
+//.catch(err => {
+//console.error(err);
+//})
+//.finally(() => console.log("fuggin donez"));
+
 
 
  // function buildNav(links) {
@@ -107,3 +207,4 @@ console.error(err);
 // ❗ DO NOT CHANGE THE CODE  BELOW
 if (typeof module !== 'undefined' && module.exports) module.exports = { sprintChallenge5 }
 else sprintChallenge5()
+}
