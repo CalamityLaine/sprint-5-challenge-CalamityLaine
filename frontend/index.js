@@ -12,18 +12,18 @@ const cards = document.querySelector('.cards')
  const card = document.createElement('div');
  const heading = document.createElement('h3');
  const email = document.createElement('div');
- const mentor = document.createElement('h4');
+ const mentors = document.createElement('h4');
 
  //skeleton for card content
  heading.textContent = 'learner name here';
  email.textContent = 'email goes here';
- mentor.textContent = 'mentors: dropdown here'
+ mentors.textContent = 'mentors: dropdown here'
  card.classList.add('card')
 
  cards.appendChild(card);
  card.appendChild(heading);
  card.appendChild(email);
- card.appendChild(mentor);
+ card.appendChild(mentors);
 
  //adding click event to card
  console.log(card)
@@ -32,21 +32,17 @@ const cards = document.querySelector('.cards')
  })
 
  return card;
+}
 
-function getLearners(count) {
 axios.get('http://localhost:3003/api/learners')
 .then(res => {
-  res.data.forEach(learner => {
-  const card = cardMaker({learner: res.data, mentors: mentors});
-  cards.appendChild(card);
-  })
+  console.log(res.data);
 })
 .catch(err => {
 console.error(err);
 })
 .finally(() => console.log("fuggin donez"));
 
-}
 
  // function buildNav(links) {
   //  const container = document.createElement("nav") 
