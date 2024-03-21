@@ -61,28 +61,31 @@ async function fetchAndCombineData() {
     card.classList.add('card');
   //  card.textContent = (learnerName, learnerEmail, learnerMentors);
 
- // const learnerName = document.querySelector('h3');
- // learnerName.textContent = `${learner.fullName}`
+  const h3 = document.createElement('h3');
+  h3.textContent = `${learner.fullName}`
 
-//  const learnerEmail = document.querySelector('div');
-//  learnerEmail.textContent = `${learner.email}`
+  const emailDiv = document.createElement('div');
+  emailDiv.textContent = `${learner.email}`
 
-// const learnerMentors = document.querySelector('h4');
-// learnerMentors.textContent = "▶ Mentors";
+  const h4 = document.createElement('h4');
+    h4.classList = "closed"
+    h4.textContent = "Mentors"
 
-//  card.appendChild('learnerName');
-//  card.appendChild('learnerEmail');
-//  card.appendChild('learnerMentors');
+  const ul = document.createElement('ul')
+  learner.mentors.forEach(mentor => {
+  const li = document.createElement('li')
+  li.textContent = mentor;
+  ul.appendChild(li)
+  });
+  
+  
 
+  card.appendChild(h3);
+  card.appendChild(emailDiv);
+  card.appendChild(h4);
+  card.appendChild(ul)
+  
 
-
-    card.innerHTML = `
-     <h3>${learner.fullName}</h3>
-     <div>${learner.email}</div>
-     <h4>▶ Mentors
-      <class="closed"</>
-     </h4>
-    `;
   
   
     // Add click event listener to the card
@@ -101,16 +104,9 @@ async function fetchAndCombineData() {
         card.classList.add('selected');
         info.textContent = `The selected learner is ${learner.fullName}`
        
-        card.innerHTML = `
-     <h3>${learner.fullName}, ID ${learner.id}</h3>
-     <div>${learner.email}</div>
-     <h4>▼ Mentors
-      <class="open"</>
-     </h4>
-     <ul> ${learner.mentors.map(mentor => `<li>${mentor}</li>`).join('')}</ul>
-    `;
-    //const ul = card.querySelector('ul');
-    //ul.classList.toggle('selected');
+   
+
+  
         
    }
       
