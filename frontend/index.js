@@ -6,8 +6,8 @@ async function sprintChallenge5( ) { // Note the async keyword, in case you wish
   footer.textContent = `© BLOOM INSTITUTE OF TECHNOLOGY ${currentYear}`
 
 
-let info = document.querySelector('.info');
-info.textContent = "No learner selected"
+const info = document.querySelector('.info');
+info.textContent = "No learner is selected"
 
 async function fetchLearners() {
   try {
