@@ -59,7 +59,6 @@ async function fetchAndCombineData() {
   function buildLearnerCard(learner) {
     let card = document.createElement('div');
     card.classList.add('card');
-  //  card.textContent = (learnerName, learnerEmail, learnerMentors);
 
   const h3 = document.createElement('h3');
   h3.textContent = `${learner.fullName}`
@@ -67,7 +66,7 @@ async function fetchAndCombineData() {
   const emailDiv = document.createElement('div');
   emailDiv.textContent = `${learner.email}`
 
-  const h4 = document.createElement('h4');
+  let h4 = document.createElement('h4');
     h4.classList = "closed"
     h4.textContent = "Mentors"
 
@@ -78,8 +77,6 @@ async function fetchAndCombineData() {
   ul.appendChild(li)
   });
   
-  
-
   card.appendChild(h3);
   card.appendChild(emailDiv);
   card.appendChild(h4);
@@ -91,30 +88,34 @@ async function fetchAndCombineData() {
     // Add click event listener to the card
     card.addEventListener('click', evt => {
       const cardSelected = card.classList.contains('selected');
-
       document.querySelectorAll('.card').forEach(card => {
-        card.classList.remove('selected')
-        info.textContent = "No learner is selected"
+      card.classList.remove('selected')
+      info.textContent = "No learner is selected"
       });
       
-     // const target = evt.target;
-  
-      // Check if the click target is the toggle button
       if (!cardSelected) {
         card.classList.add('selected');
         info.textContent = `The selected learner is ${learner.fullName}`
-       
-   
-
-  
         
    }
       
-    });
+   });
   
+    h4.addEventListener('click', evt => {
+    //const h4Open = h4.classList.contains('open');
+    //document.querySelector('.h4').forEach(h4 => {
+    // h4.classList = "open"
+    const parentCard = h4.closest('.card')
+    
+    if (parentCard && parentCard.classList.contains('selected')) {
+    h4.classList.toggle('closed')
+    h4.classList.toggle('open')
+    evt.stopPropagation()
+    }
+  });
+
     return card;
   }
-
   // Function to render learner cards
   async function renderLearnerCards() {
     try {
@@ -136,7 +137,7 @@ async function fetchAndCombineData() {
     console.error('Error rendering learner cards:', error);
   });
 }
-  //    console.log('😔 Promise rejected with an err.message -->', err.message)
+
   // 👆 WORK WORK ABOVE THIS LINE 👆
 
 
