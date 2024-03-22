@@ -91,12 +91,15 @@ async function fetchAndCombineData() {
       document.querySelectorAll('.card').forEach(card => {
       card.classList.remove('selected')
       info.textContent = "No learner is selected"
+
       });
       
       if (!cardSelected) {
         card.classList.add('selected');
         info.textContent = `The selected learner is ${learner.fullName}`
-        
+        h3.textContent = `${learner.fullName}, ID ${learner.id}`
+   } else {
+    h3.textContent = `${learner.fullName}`
    }
       
    });
