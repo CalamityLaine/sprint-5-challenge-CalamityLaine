@@ -7,7 +7,7 @@ async function sprintChallenge5( ) { // Note the async keyword, in case you wish
 
 
 let info = document.querySelector('.info');
-info.textContent = "No learner Selected"
+info.textContent = "No learner selected"
 
 async function fetchLearners() {
   try {
